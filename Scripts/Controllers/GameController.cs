@@ -50,6 +50,8 @@ public class GameController : MonoBehaviour {
     void GenerateMap()
     {
         starMap = mapGen.GenerateRandomStars(seed, height, width, maxDensity);
+
+        theGalaxy = new Galaxy(starMap);
     }
     
         

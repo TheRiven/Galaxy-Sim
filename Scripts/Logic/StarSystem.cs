@@ -5,11 +5,15 @@ public class StarSystem {
 
     #region properties
 
-    #endregion
+    public Vector3 starPosition { get; private set; }
+
+    #endregion ----------------
 
 
-    public StarSystem()
+    public StarSystem(Vector3 _starPosiiton)
     {
+
+        starPosition = _starPosiiton;
 
     }
 
