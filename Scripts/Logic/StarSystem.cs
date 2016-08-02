@@ -5,6 +5,8 @@ public class StarSystem {
 
     #region properties
 
+    public string starName { get; private set; }
+
     public Vector3 starPosition { get; private set; }
 
     #endregion ----------------
@@ -14,6 +16,8 @@ public class StarSystem {
     {
 
         starPosition = _starPosiiton;
+
+        starName = "star_" + starPosition.x + "_" + starPosition.y;
 
     }
 

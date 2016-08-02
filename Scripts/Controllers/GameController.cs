@@ -10,7 +10,11 @@ public class GameController : MonoBehaviour {
     public int height;
     public int width;
 
-    // MAP GEN
+
+    // DEBUG Options
+    public bool DrawGizmosON = false;
+
+    // MAP GEN ------
 
     // Seed for map generation
     public string seed;
@@ -23,7 +27,7 @@ public class GameController : MonoBehaviour {
 
     MapGenerator mapGen;
 
-    // END MAP GEN
+    // END MAP GEN ------
 
     Galaxy theGalaxy;
     
@@ -34,6 +38,9 @@ public class GameController : MonoBehaviour {
     {
         mapGen = new MapGenerator();
         GenerateMap();
+
+        Camera.main.transform.position = new Vector3(width / 2, height / 2, - 10);
+
 	}
         
 
@@ -42,6 +49,7 @@ public class GameController : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(0) )
         {
+            SpriteController.instance.ClearStarGameObjects();
             GenerateMap();
         }
 	}
@@ -52,11 +60,18 @@ public class GameController : MonoBehaviour {
         starMap = mapGen.GenerateRandomStars(seed, height, width, maxDensity);
 
         theGalaxy = new Galaxy(starMap);
+
     }
     
         
     void OnDrawGizmos()
     {
+        if (DrawGizmosON == false)
+        {
+            return;
+        }
+
+
         if(starMap != null)
         {
             for (int x = 0; x < width; x++)

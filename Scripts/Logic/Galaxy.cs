@@ -6,7 +6,7 @@ public class Galaxy {
 
     #region Properties
 
-    List<StarSystem> Systems;
+    public List<StarSystem> Systems { get; private set; }
 
     #endregion ----------------
 
@@ -34,6 +34,8 @@ public class Galaxy {
                     //Debug.Log("New Starsystem created at: " + starPos.ToString() );
 
                     Systems.Add(newSystem);
+                    SpriteController.instance.CreateStarGameObjects(newSystem);
+                    
                 }
             }
         }

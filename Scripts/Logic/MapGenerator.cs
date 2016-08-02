@@ -18,7 +18,7 @@ public class MapGenerator {
             int five = Random.Range(0, 9);
 
             newSeed = "" + one + two + three + four + five;
-            Debug.Log("Random Seed generated: " + newSeed);
+            //Debug.Log("Random Seed generated: " + newSeed);
         }
 
         System.Random randomGen = new System.Random(newSeed.GetHashCode());
