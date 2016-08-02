@@ -10,7 +10,11 @@ public class GameController : MonoBehaviour {
     public int height;
     public int width;
 
-    // MAP GEN
+
+    // DEBUG Options
+    public bool DrawGizmosON = false;
+
+    // MAP GEN ------
 
     // Seed for map generation
     public string seed;
@@ -23,10 +27,13 @@ public class GameController : MonoBehaviour {
 
     MapGenerator mapGen;
 
-    // END MAP GEN
+    // END MAP GEN ------
 
     Galaxy theGalaxy;
-    
+
+    Vector3 currFramePostion;
+    Vector3 lastFramePostion;
+
     #endregion ----------------
 
     // Use this for initialization
@@ -34,27 +41,47 @@ public class GameController : MonoBehaviour {
     {
         mapGen = new MapGenerator();
         GenerateMap();
+
+        Camera.main.transform.position = new Vector3(width / 2, height / 2, - 10);
+
 	}
         
 
     // Update is called once per frame
     void Update ()
     {
-        if (Input.GetMouseButtonDown(0) )
+                
+        currFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        if (Input.GetMouseButton(1) || Input.GetMouseButton(2) )
         {
-            GenerateMap();
+            CameraScrolling();
         }
-	}
+
+        CameraZooming();
+
+        lastFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+    }
 
 
     void GenerateMap()
     {
         starMap = mapGen.GenerateRandomStars(seed, height, width, maxDensity);
+
+        theGalaxy = new Galaxy(starMap);
+
     }
     
         
     void OnDrawGizmos()
     {
+        if (DrawGizmosON == false)
+        {
+            return;
+        }
+
+
         if(starMap != null)
         {
             for (int x = 0; x < width; x++)
@@ -68,6 +95,25 @@ public class GameController : MonoBehaviour {
             }
 
         }
+    }
+
+
+    void CameraScrolling() // Handle screen dragging
+    {
+        // FIXME: needs to set a limit to how far you can move the camera so that you don't get lost.
+
+        //Debug.Log ("Current Mouse Position: " + currFramePostion);
+        Vector3 diff = lastFramePostion - currFramePostion;
+        Camera.main.transform.Translate(diff);
+
+    }
+
+
+    void CameraZooming() // Allows the scroll wheel to alter the camera zoom level
+    {
+        Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
+        // Restricts the zoom level to within size 3 to 25
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 5f, 25f);
     }
 
 }
