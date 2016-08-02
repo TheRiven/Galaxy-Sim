@@ -8,6 +8,8 @@ public class InputController : MonoBehaviour {
     Vector3 currFramePostion;
     Vector3 lastFramePostion;
 
+
+
     #endregion ---------------
 
     // Use this for initialization
@@ -19,16 +21,19 @@ public class InputController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        currFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
+        // Camera Control
+        currFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (Input.GetMouseButton(1) || Input.GetMouseButton(2))
-        {
             CameraScrolling();
-        }
 
         CameraZooming();
-
         lastFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        // Mouse Selection
+        if (Input.GetMouseButtonDown(0))
+            SelectObject();
+
 
     }
 
@@ -52,6 +57,26 @@ public class InputController : MonoBehaviour {
     }
 
 
+    void SelectObject()
+    {
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit) )
+        {
+            GameObject gameObject = hit.collider.gameObject;
+
+            StarSystem star = SpriteController.instance.GetStarSystemFromGameObject(gameObject);
+            SpriteController.instance.SelectStarSystem(star);
+        }
+        else
+        {
+            SpriteController.instance.ClearSelection();
+        }
+
+
+    }
 
 
 
