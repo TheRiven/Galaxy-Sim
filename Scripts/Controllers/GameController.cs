@@ -10,9 +10,8 @@ public class GameController : MonoBehaviour {
     public int height;
     public int width;
 
-
     // DEBUG Options
-    public bool DrawGizmosON = false;
+    //public bool DrawGizmosON = false;
 
     // MAP GEN ------
 
@@ -21,11 +20,6 @@ public class GameController : MonoBehaviour {
 
     [Range(0, 100)]
     public int maxDensity = 100;
-
-    // 2 dimensional array of stars
-    int[,] starMap;
-
-    MapGenerator mapGen;
 
     // END MAP GEN ------
 
@@ -36,32 +30,19 @@ public class GameController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        mapGen = new MapGenerator();
-        GenerateMap();
-
+        theGalaxy = MapGenerator.GenerateGalaxy(seed, height, width, maxDensity);
         Camera.main.transform.position = new Vector3(width / 2, height / 2, - 10);
-
 	}
         
 
     // Update is called once per frame
     void Update ()
-    {
-                
-        
+    {   
 
     }
+            
 
-
-    void GenerateMap()
-    {
-        starMap = mapGen.GenerateRandomStars(seed, height, width, maxDensity);
-
-        theGalaxy = new Galaxy(starMap);
-
-    }
-    
-        
+    /*    Debug Gizmos - Broken as of map gen rework
     void OnDrawGizmos()
     {
         if (DrawGizmosON == false)
@@ -84,7 +65,7 @@ public class GameController : MonoBehaviour {
 
         }
     }
-
+    */
 
     
 

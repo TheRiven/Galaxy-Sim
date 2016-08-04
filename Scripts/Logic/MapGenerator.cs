@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class MapGenerator {
-        
+public static class MapGenerator {
 
-    public int[,] GenerateRandomStars(string seed, int height, int width, int maxDensity )
+
+    #region Generate Star Map
+
+    static int[,] GenerateStarMap(string seed, int height, int width, int maxDensity )
     {
         string newSeed = seed;
         int[,] starMap = new int[width, height];
@@ -43,7 +45,7 @@ public class MapGenerator {
     }
 
 
-    void SmoothMap(int[,] starMap, int width, int height, int currentStarX, int currentStarY)
+    static void  SmoothMap(int[,] starMap, int width, int height, int currentStarX, int currentStarY)
     {
 
         int neighbourStars = GetSurroundingStarCount(currentStarX, currentStarY, width, height, starMap);
@@ -53,7 +55,7 @@ public class MapGenerator {
     }
     
 
-    int GetSurroundingStarCount(int gridX, int gridY, int width, int height, int[,] starMap)
+    static int GetSurroundingStarCount(int gridX, int gridY, int width, int height, int[,] starMap)
     {
         int wallCount = 0;
         for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -76,5 +78,52 @@ public class MapGenerator {
 
         return wallCount;
     }
+
+    #endregion ------------------
+
+
+    #region Galaxy Generation
+
+    public static Galaxy GenerateGalaxy(string seed, int height, int width, int maxDensity)
+    {
+        int[,] starMap = GenerateStarMap(seed, height, width, maxDensity);
+
+        List<StarSystem> systems = CreateStarSystems(starMap);
+
+        Galaxy newGalaxy = new Galaxy(systems);
+
+        return newGalaxy;
+    }
+
+
+    static List<StarSystem> CreateStarSystems(int[,] starMap)
+    {
+
+        List<StarSystem> newSystemsList = new List<StarSystem>();
+
+        for (int x = 0; x < starMap.GetLength(0); x++)
+        {
+            for (int y = 0; y < starMap.GetLength(1); y++)
+            {
+                if (starMap[x, y] == 1)
+                {
+                    Vector3 starPos = new Vector3(x, y);
+
+                    StarSystem newSystem = new StarSystem(starPos);
+                    //Debug.Log("New Starsystem created at: " + starPos.ToString() );
+
+                    newSystemsList.Add(newSystem);
+                    SpriteController.instance.CreateStarGameObjects(newSystem); // TODO: This needs to change when the new VIEW model is implemented.
+
+                }
+            }
+        }
+
+        return newSystemsList;
+
+    }
+    
+    #endregion ------------------
+
 
 }
