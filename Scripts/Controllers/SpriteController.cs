@@ -5,14 +5,14 @@ public class SpriteController : MonoBehaviour {
 
     #region properties
 
-    Dictionary<StarSystem, GameObject> starSystemsDictionary; // Dictionary of Stars and their GameObjects
+    Dictionary<ISpaceGameObject, GameObject> gameObjectDictionary; // Dictionary of Space objects and their GameObjects.
 
     public static SpriteController instance; // Static Instance of the SpriteController for easy access.
 
     public Sprite defaultStarSprite; // Basic star sprite
     public Sprite selectionSprite; // Basic selection sprite
+    public Sprite sunSprite; // Basic Sun Sprite
 
-    StarSystem selectedStar; // The currently selected star.
     GameObject selectionCircle; // The object showing the selected star.
 
     #endregion ---------------
@@ -22,8 +22,9 @@ public class SpriteController : MonoBehaviour {
     void OnEnable ()
     {
         instance = this;
-        starSystemsDictionary = new Dictionary<StarSystem, GameObject>();
-	}
+        gameObjectDictionary = new Dictionary<ISpaceGameObject, GameObject>();
+
+    }
 	
 
 	// Update is called once per frame
@@ -33,78 +34,74 @@ public class SpriteController : MonoBehaviour {
 	}
 
 
-    public void CreateStarGameObjects(StarSystem star)
+    public void CreateGameObjects(ISpaceGameObject spaceObject)
     {
-        // Create and setup the Star Gameobjects.
-        GameObject starGO = new GameObject(star.starName);
+        // Create and setup the Gameobjects.
+        GameObject starGO = new GameObject(spaceObject.name);
         starGO.transform.SetParent(this.transform);
-        starGO.transform.position = star.starPosition;
-        starSystemsDictionary.Add(star, starGO);
+        starGO.transform.position = spaceObject.position;
+        gameObjectDictionary.Add(spaceObject, starGO);
 
         // add the sprite renderer.
         SpriteRenderer sr = starGO.AddComponent<SpriteRenderer>();
-        sr.sprite = defaultStarSprite;
+
+        switch (spaceObject.type)
+        {
+            case "star" : sr.sprite = defaultStarSprite;
+                break;
+            case "sun"  : sr.sprite = sunSprite;
+                break;
+        }
 
         // Add a collider to allow raycasting.
         starGO.AddComponent<BoxCollider>();
 
     }
 
-
-    public void ClearStarGameObjects()
+    
+    public void ClearGameObjects()
     {
         // Destroys all of the Game Objects
-        foreach (StarSystem star in starSystemsDictionary.Keys)
+        foreach (ISpaceGameObject spaceObject in gameObjectDictionary.Keys)
         {
-            Destroy( starSystemsDictionary[star] );
+            Destroy(gameObjectDictionary[spaceObject]);
         }
 
         // Resets the Dictionary
-        starSystemsDictionary = new Dictionary<StarSystem, GameObject>();
-
+        gameObjectDictionary = new Dictionary<ISpaceGameObject, GameObject>();
     }
 
-
-    public void SelectStarSystem(StarSystem star)
+    
+    public void DisplaySelectedStarSystem(StarSystem star)
     {
-
-        if (selectedStar != star)
-        {
-            selectedStar = star;
-
-            if (selectionCircle != null)
-                Destroy(selectionCircle);
-
-            selectionCircle = new GameObject("Selection_Circle");
-            selectionCircle.transform.position = star.starPosition;
-
-            // add the sprite renderer.
-            SpriteRenderer sr = selectionCircle.AddComponent<SpriteRenderer>();
-            sr.sprite = selectionSprite;
-
-        }
-
-    }
-
-
-    public void ClearSelection()
-    {
-        selectedStar = null;
-
         if (selectionCircle != null)
             Destroy(selectionCircle);
 
+        selectionCircle = new GameObject("Selection_Circle");
+        selectionCircle.transform.position = star.position;
+
+        // add the sprite renderer.
+        SpriteRenderer sr = selectionCircle.AddComponent<SpriteRenderer>();
+        sr.sprite = selectionSprite;
+
+    }
+
+
+    public void ClearDisplayedSelection()
+    {
+        if (selectionCircle != null)
+            Destroy(selectionCircle);
     }
 
 
     public StarSystem GetStarSystemFromGameObject(GameObject gameObject)
     {
 
-        foreach (KeyValuePair<StarSystem, GameObject> kvp in starSystemsDictionary)
+        foreach (KeyValuePair<ISpaceGameObject, GameObject> kvp in gameObjectDictionary)
         {
             if (gameObject == kvp.Value)
             {
-                return kvp.Key;
+                return (StarSystem)kvp.Key;
             }
         }
 

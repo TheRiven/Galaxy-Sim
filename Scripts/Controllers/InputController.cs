@@ -8,7 +8,7 @@ public class InputController : MonoBehaviour {
     Vector3 currFramePostion;
     Vector3 lastFramePostion;
 
-
+    StarSystem selectedStar; // The currently selected star.
 
     #endregion ---------------
 
@@ -30,9 +30,12 @@ public class InputController : MonoBehaviour {
         CameraZooming();
         lastFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        // Mouse Selection
-        if (Input.GetMouseButtonDown(0))
+        // Mouse Selection for Galaxy Mode
+        if (Input.GetMouseButtonDown(0) & ViewController.instance.viewMode == VIEWMODE.GALAXY)
             SelectObject();
+
+        if (Input.GetKeyDown(KeyCode.Space) & ViewController.instance.viewMode == VIEWMODE.STARSYSTEM)
+            ViewController.instance.DisplayGalaxy();
 
 
     }
@@ -68,11 +71,25 @@ public class InputController : MonoBehaviour {
             GameObject gameObject = hit.collider.gameObject;
 
             StarSystem star = SpriteController.instance.GetStarSystemFromGameObject(gameObject);
-            SpriteController.instance.SelectStarSystem(star);
+
+            if (selectedStar != star)
+            {
+                selectedStar = star;
+                SpriteController.instance.DisplaySelectedStarSystem(star);
+            }
+            else
+            {
+                selectedStar = null;
+                SpriteController.instance.ClearDisplayedSelection();
+                ViewController.instance.DisplaySystem(star);
+            }
+
+            
         }
         else
         {
-            SpriteController.instance.ClearSelection();
+            selectedStar = null;
+            SpriteController.instance.ClearDisplayedSelection();
         }
 
 
