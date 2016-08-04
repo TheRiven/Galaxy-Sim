@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MapGenerator {
-        
+public static class MapGenerator {
 
-    public int[,] GenerateRandomStars(string seed, int height, int width, int maxDensity )
+
+    #region Generate Star Map
+
+    public static int[,] GenerateRandomStars(string seed, int height, int width, int maxDensity )
     {
         string newSeed = seed;
         int[,] starMap = new int[width, height];
@@ -43,7 +45,7 @@ public class MapGenerator {
     }
 
 
-    void SmoothMap(int[,] starMap, int width, int height, int currentStarX, int currentStarY)
+    static void  SmoothMap(int[,] starMap, int width, int height, int currentStarX, int currentStarY)
     {
 
         int neighbourStars = GetSurroundingStarCount(currentStarX, currentStarY, width, height, starMap);
@@ -53,7 +55,7 @@ public class MapGenerator {
     }
     
 
-    int GetSurroundingStarCount(int gridX, int gridY, int width, int height, int[,] starMap)
+    static int GetSurroundingStarCount(int gridX, int gridY, int width, int height, int[,] starMap)
     {
         int wallCount = 0;
         for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -76,5 +78,7 @@ public class MapGenerator {
 
         return wallCount;
     }
+
+    #endregion ------------------
 
 }

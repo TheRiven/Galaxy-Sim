@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour {
     // 2 dimensional array of stars
     int[,] starMap;
 
-    MapGenerator mapGen;
+    //MapGenerator mapGen;
 
     // END MAP GEN ------
 
@@ -36,29 +36,23 @@ public class GameController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        mapGen = new MapGenerator();
         GenerateMap();
-
         Camera.main.transform.position = new Vector3(width / 2, height / 2, - 10);
-
 	}
         
 
     // Update is called once per frame
     void Update ()
-    {
-                
-        
+    {   
 
     }
 
 
     void GenerateMap()
     {
-        starMap = mapGen.GenerateRandomStars(seed, height, width, maxDensity);
+        starMap = MapGenerator.GenerateRandomStars(seed, height, width, maxDensity);
 
         theGalaxy = new Galaxy(starMap);
-
     }
     
         
