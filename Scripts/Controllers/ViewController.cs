@@ -2,8 +2,9 @@
 using System.Collections;
 
 
-enum VIEWMODE
+public enum VIEWMODE
 {
+    NONE,
     GALAXY,
     STARSYSTEM
 }
@@ -13,7 +14,7 @@ public class ViewController : MonoBehaviour {
 
     #region properties
 
-    VIEWMODE viewMode = VIEWMODE.GALAXY;
+    public VIEWMODE viewMode { get; private set; }
 
     public static ViewController instance;
     
@@ -23,8 +24,8 @@ public class ViewController : MonoBehaviour {
     void OnEnable ()
     {
         instance = this;
-
-	}
+        viewMode = VIEWMODE.NONE;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -35,7 +36,17 @@ public class ViewController : MonoBehaviour {
 
     public void DisplayGalaxy()
     {
-        
+        if (viewMode == VIEWMODE.GALAXY)
+        {
+            return;
+        }
+
+        viewMode = VIEWMODE.GALAXY;
+
+        Camera.main.transform.position = new Vector3(GameController.instance.width / 2, GameController.instance.height / 2, -10);
+
+        SpriteController.instance.ClearBodyGameObjects();
+
         foreach (StarSystem system in GameController.instance.GetCurrentGalaxy().Systems)
         {
             SpriteController.instance.CreateStarGameObjects(system);
@@ -43,5 +54,26 @@ public class ViewController : MonoBehaviour {
 
     }
 
+
+    public void DisplaySystem(StarSystem star)
+    {
+        if (viewMode == VIEWMODE.STARSYSTEM)
+        {
+            return;
+        }
+
+        viewMode = VIEWMODE.STARSYSTEM;
+
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+
+        SpriteController.instance.ClearStarGameObjects();
+
+        foreach (Body body in star.systemBodies)
+        {
+            SpriteController.instance.CreateBodyGameObjects(body);
+        }
+
+
+    }
 
 }

@@ -109,11 +109,12 @@ public static class MapGenerator {
                 {
                     Vector3 starPos = new Vector3(x, y);
 
-                    StarSystem newSystem = new StarSystem(starPos);
+                    List<Body> systemBodies = CreateSystemBodies();
+
+                    StarSystem newSystem = new StarSystem(starPos, systemBodies);
                     //Debug.Log("New Starsystem created at: " + starPos.ToString() );
 
                     newSystemsList.Add(newSystem);
-                    //SpriteController.instance.CreateStarGameObjects(newSystem); // TODO: This needs to change when the new VIEW model is implemented.
 
                 }
             }
@@ -122,8 +123,28 @@ public static class MapGenerator {
         return newSystemsList;
 
     }
-    
+
     #endregion ------------------
 
+
+    #region Star System Generation
+
+    static List<Body> CreateSystemBodies()
+    {
+        List<Body> systemBodies = new List<Body>();
+
+        // Create the systems Sun
+        Vector3 sunPosition = new Vector3(0,0,0);
+        Body sun = new Body(sunPosition, "Sun");
+        systemBodies.Add(sun);
+
+        // TODO: create other system bodies.
+
+        return systemBodies;
+    }
+
+
+
+    #endregion ------------------
 
 }

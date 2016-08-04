@@ -37,7 +37,7 @@ public class GameController : MonoBehaviour {
         instance = this;
 
         theGalaxy = MapGenerator.GenerateGalaxy(seed, height, width, maxDensity);
-        Camera.main.transform.position = new Vector3(width / 2, height / 2, - 10);
+        
 
         ViewController.instance.DisplayGalaxy();
 

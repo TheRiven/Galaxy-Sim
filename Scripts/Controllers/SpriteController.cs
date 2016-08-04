@@ -6,13 +6,14 @@ public class SpriteController : MonoBehaviour {
     #region properties
 
     Dictionary<StarSystem, GameObject> starSystemsDictionary; // Dictionary of Stars and their GameObjects
+    Dictionary<Body, GameObject> bodyDictionary; // Dictionary of Bodies and their GameObjects
 
     public static SpriteController instance; // Static Instance of the SpriteController for easy access.
 
     public Sprite defaultStarSprite; // Basic star sprite
     public Sprite selectionSprite; // Basic selection sprite
+    public Sprite sunSprite; // Basic Sun Sprite
 
-    StarSystem selectedStar; // The currently selected star.
     GameObject selectionCircle; // The object showing the selected star.
 
     #endregion ---------------
@@ -23,7 +24,9 @@ public class SpriteController : MonoBehaviour {
     {
         instance = this;
         starSystemsDictionary = new Dictionary<StarSystem, GameObject>();
-	}
+        bodyDictionary = new Dictionary<Body, GameObject>();
+
+    }
 	
 
 	// Update is called once per frame
@@ -51,6 +54,25 @@ public class SpriteController : MonoBehaviour {
     }
 
 
+    public void CreateBodyGameObjects(Body systemBody)
+    {
+
+        // Create and setup the Star Gameobjects.
+        GameObject bodyGO = new GameObject(systemBody.name);
+        bodyGO.transform.SetParent(this.transform);
+        bodyGO.transform.position = systemBody.position;
+        bodyDictionary.Add(systemBody, bodyGO);
+
+        // add the sprite renderer.
+        SpriteRenderer sr = bodyGO.AddComponent<SpriteRenderer>();
+        sr.sprite = sunSprite;
+
+        // Add a collider to allow raycasting.
+        bodyGO.AddComponent<BoxCollider>();
+
+    }
+
+
     public void ClearStarGameObjects()
     {
         // Destroys all of the Game Objects
@@ -64,36 +86,39 @@ public class SpriteController : MonoBehaviour {
 
     }
 
+    public void ClearBodyGameObjects()
+    { 
+        // Destroys all of the Game Objects
+        foreach (Body body in bodyDictionary.Keys)
+        {
+            Destroy(bodyDictionary[body]);
+        }
+
+        // Resets the Dictionary
+        bodyDictionary = new Dictionary<Body, GameObject>();
+
+    }
+
 
     public void SelectStarSystem(StarSystem star)
     {
+        if (selectionCircle != null)
+            Destroy(selectionCircle);
 
-        if (selectedStar != star)
-        {
-            selectedStar = star;
+        selectionCircle = new GameObject("Selection_Circle");
+        selectionCircle.transform.position = star.starPosition;
 
-            if (selectionCircle != null)
-                Destroy(selectionCircle);
-
-            selectionCircle = new GameObject("Selection_Circle");
-            selectionCircle.transform.position = star.starPosition;
-
-            // add the sprite renderer.
-            SpriteRenderer sr = selectionCircle.AddComponent<SpriteRenderer>();
-            sr.sprite = selectionSprite;
-
-        }
+        // add the sprite renderer.
+        SpriteRenderer sr = selectionCircle.AddComponent<SpriteRenderer>();
+        sr.sprite = selectionSprite;
 
     }
 
 
     public void ClearSelection()
     {
-        selectedStar = null;
-
         if (selectionCircle != null)
             Destroy(selectionCircle);
-
     }
 
 
