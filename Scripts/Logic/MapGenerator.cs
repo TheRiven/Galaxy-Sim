@@ -113,7 +113,7 @@ public static class MapGenerator {
                     //Debug.Log("New Starsystem created at: " + starPos.ToString() );
 
                     newSystemsList.Add(newSystem);
-                    SpriteController.instance.CreateStarGameObjects(newSystem); // TODO: This needs to change when the new VIEW model is implemented.
+                    //SpriteController.instance.CreateStarGameObjects(newSystem); // TODO: This needs to change when the new VIEW model is implemented.
 
                 }
             }

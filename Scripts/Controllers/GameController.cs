@@ -13,11 +13,13 @@ public class GameController : MonoBehaviour {
     // DEBUG Options
     //public bool DrawGizmosON = false;
 
+    
     // MAP GEN ------
 
     // Seed for map generation
     public string seed;
 
+    // Star generation density
     [Range(0, 100)]
     public int maxDensity = 100;
 
@@ -25,13 +27,20 @@ public class GameController : MonoBehaviour {
 
     Galaxy theGalaxy;
 
+    public static GameController instance;
+
     #endregion ----------------
 
     // Use this for initialization
     void Start ()
     {
+        instance = this;
+
         theGalaxy = MapGenerator.GenerateGalaxy(seed, height, width, maxDensity);
         Camera.main.transform.position = new Vector3(width / 2, height / 2, - 10);
+
+        ViewController.instance.DisplayGalaxy();
+
 	}
         
 
@@ -39,6 +48,12 @@ public class GameController : MonoBehaviour {
     void Update ()
     {   
 
+    }
+    
+    
+    public Galaxy GetCurrentGalaxy()
+    {
+        return theGalaxy;
     }
             
 
