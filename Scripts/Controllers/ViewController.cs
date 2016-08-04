@@ -45,11 +45,11 @@ public class ViewController : MonoBehaviour {
 
         Camera.main.transform.position = new Vector3(GameController.instance.width / 2, GameController.instance.height / 2, -10);
 
-        SpriteController.instance.ClearBodyGameObjects();
+        SpriteController.instance.ClearGameObjects();
 
         foreach (StarSystem system in GameController.instance.GetCurrentGalaxy().Systems)
         {
-            SpriteController.instance.CreateStarGameObjects(system);
+            SpriteController.instance.CreateGameObjects(system);
         }
 
     }
@@ -66,11 +66,11 @@ public class ViewController : MonoBehaviour {
 
         Camera.main.transform.position = new Vector3(0, 0, -10);
 
-        SpriteController.instance.ClearStarGameObjects();
+        SpriteController.instance.ClearGameObjects();
 
         foreach (Body body in star.systemBodies)
         {
-            SpriteController.instance.CreateBodyGameObjects(body);
+            SpriteController.instance.CreateGameObjects(body);
         }
 
 

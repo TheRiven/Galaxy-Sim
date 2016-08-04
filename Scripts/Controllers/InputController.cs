@@ -75,12 +75,12 @@ public class InputController : MonoBehaviour {
             if (selectedStar != star)
             {
                 selectedStar = star;
-                SpriteController.instance.SelectStarSystem(star);
+                SpriteController.instance.DisplaySelectedStarSystem(star);
             }
             else
             {
                 selectedStar = null;
-                SpriteController.instance.ClearSelection();
+                SpriteController.instance.ClearDisplayedSelection();
                 ViewController.instance.DisplaySystem(star);
             }
 
@@ -89,7 +89,7 @@ public class InputController : MonoBehaviour {
         else
         {
             selectedStar = null;
-            SpriteController.instance.ClearSelection();
+            SpriteController.instance.ClearDisplayedSelection();
         }
 
 

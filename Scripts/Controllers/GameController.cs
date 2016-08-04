@@ -37,7 +37,6 @@ public class GameController : MonoBehaviour {
         instance = this;
 
         theGalaxy = MapGenerator.GenerateGalaxy(seed, height, width, maxDensity);
-        
 
         ViewController.instance.DisplayGalaxy();
 
