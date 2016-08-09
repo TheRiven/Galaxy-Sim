@@ -9,9 +9,10 @@ public class SpriteController : MonoBehaviour {
 
     public static SpriteController instance; // Static Instance of the SpriteController for easy access.
 
-    public Sprite defaultStarSprite; // Basic star sprite
-    public Sprite selectionSprite; // Basic selection sprite
-    public Sprite sunSprite; // Basic Sun Sprite
+    public Sprite defaultStarSprite;    // Basic star sprite
+    public Sprite selectionSprite;      // Basic selection sprite
+    public Sprite sunSprite;            // Basic Sun Sprite
+    public Sprite planetSprite;         // Basic Planet Sprite
 
     GameObject selectionCircle; // The object showing the selected star.
 
@@ -50,6 +51,8 @@ public class SpriteController : MonoBehaviour {
             case objectType.STAR : sr.sprite = defaultStarSprite;
                 break;
             case objectType.SUN  : sr.sprite = sunSprite;
+                break;
+            case objectType.PLANET : sr.sprite = planetSprite;
                 break;
         }
 

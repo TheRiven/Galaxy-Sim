@@ -140,8 +140,27 @@ public static class MapGenerator {
 
         // TODO: create other system bodies.
 
+        // Work out how many bodies the system will have, from 0 to 5 for now.
+        int bodyCount = Random.Range(0, 5);
+        int radius = 10;
 
+        // For each body give it a name and a position, the only type used will be planet for now.
+        for (int i = 0; i < bodyCount; i++)
+        {
+            // Work out the position
+            Vector3 bodyPosition = new Vector3(radius, 0);
+            radius = radius + 10;
+            
+            // Set the name, currently using the position but will use a name list/name gen later.
+            string name = "Body_" + radius;
 
+            // Set the type
+            objectType type = objectType.PLANET;
+
+            // Create the body and add it to the list
+            Body newBody = new Body(bodyPosition, name, type);
+            systemBodies.Add(newBody);
+        }
 
 
         return systemBodies;
