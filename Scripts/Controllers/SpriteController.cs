@@ -47,9 +47,9 @@ public class SpriteController : MonoBehaviour {
 
         switch (spaceObject.type)
         {
-            case "star" : sr.sprite = defaultStarSprite;
+            case objectType.STAR : sr.sprite = defaultStarSprite;
                 break;
-            case "sun"  : sr.sprite = sunSprite;
+            case objectType.SUN  : sr.sprite = sunSprite;
                 break;
         }
 

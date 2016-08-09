@@ -135,10 +135,14 @@ public static class MapGenerator {
 
         // Create the systems Sun
         Vector3 sunPosition = new Vector3(0,0,0);
-        Body sun = new Body(sunPosition, "Sun", "sun");
+        Body sun = new Body(sunPosition, "Sun", objectType.SUN);
         systemBodies.Add(sun);
 
         // TODO: create other system bodies.
+
+
+
+
 
         return systemBodies;
     }

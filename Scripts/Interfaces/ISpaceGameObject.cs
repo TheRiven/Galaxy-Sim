@@ -1,10 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum objectType
+{
+    STAR,
+    SUN,
+    PLANET
+}
+
 public interface ISpaceGameObject {
 
     string name { get; }
     Vector3 position { get; }
-    string type { get; }
+    objectType type { get; }
 	
 }
