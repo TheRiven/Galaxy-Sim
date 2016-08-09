@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour {
 
         ViewController.instance.DisplayGalaxy();
 
-	}
+    }
         
 
     // Update is called once per frame
