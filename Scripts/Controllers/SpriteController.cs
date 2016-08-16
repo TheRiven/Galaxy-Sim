@@ -109,7 +109,7 @@ public class SpriteController : MonoBehaviour {
     }
 
     
-    public void DisplaySelectedStarSystem(StarSystem star)
+    public void DisplaySelectedSpaceObject(ISpaceGameObject star)
     {
         if (selectionCircle != null)
             Destroy(selectionCircle);
@@ -131,14 +131,14 @@ public class SpriteController : MonoBehaviour {
     }
 
 
-    public StarSystem GetStarSystemFromGameObject(GameObject gameObject)
+    public ISpaceGameObject GetSpaceObjectFromGameObject(GameObject gameObject)
     {
 
         foreach (KeyValuePair<ISpaceGameObject, GameObject> kvp in gameObjectDictionary)
         {
             if (gameObject == kvp.Value)
             {
-                return (StarSystem)kvp.Key;
+                return kvp.Key;
             }
         }
 

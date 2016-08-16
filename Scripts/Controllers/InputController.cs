@@ -8,7 +8,8 @@ public class InputController : MonoBehaviour {
     Vector3 currFramePostion;
     Vector3 lastFramePostion;
 
-    StarSystem selectedStar; // The currently selected star.
+    StarSystem selectedStar;    // The currently selected star - IF IN GALAXY MODE.
+    Body selectedBody;          // The currently selected body - IF IN STARSYSTEM MODE.
 
     #endregion ---------------
 
@@ -31,7 +32,9 @@ public class InputController : MonoBehaviour {
         lastFramePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // Mouse Selection for Galaxy Mode
-        if (Input.GetMouseButtonDown(0) & ViewController.instance.viewMode == VIEWMODE.GALAXY)
+        //if (Input.GetMouseButtonDown(0) & ViewController.instance.viewMode == VIEWMODE.GALAXY)
+
+        if (Input.GetMouseButtonDown(0))
             SelectObject();
 
         // Escape key for Star System Mode
@@ -69,23 +72,16 @@ public class InputController : MonoBehaviour {
 
         if (Physics.Raycast(ray, out hit) )
         {
-            GameObject gameObject = hit.collider.gameObject;
+            GameObject go = hit.collider.gameObject;
 
-            StarSystem star = SpriteController.instance.GetStarSystemFromGameObject(gameObject);
-
-            if (selectedStar != star)
+            if (ViewController.instance.viewMode == VIEWMODE.GALAXY)
             {
-                selectedStar = star;
-                SpriteController.instance.DisplaySelectedStarSystem(star);
-                ViewController.instance.DisplaySelectionInfo(star);
+                SelectedStarSystem(go);
             }
-            else
+            else if (ViewController.instance.viewMode == VIEWMODE.STARSYSTEM)
             {
-                selectedStar = null;
-                SpriteController.instance.ClearDisplayedSelection();
-                ViewController.instance.DisplaySystem(star);
+                SelectedBody(go);
             }
-
             
         }
         else
@@ -98,5 +94,40 @@ public class InputController : MonoBehaviour {
     }
 
 
+    void SelectedStarSystem(GameObject go)
+    {
+        StarSystem star = (StarSystem) SpriteController.instance.GetSpaceObjectFromGameObject(go);
+
+        if (selectedStar != star)
+        {
+            selectedStar = star;
+            SpriteController.instance.DisplaySelectedSpaceObject(star);
+            ViewController.instance.DisplaySelectionInfo(star);
+        }
+        else
+        {
+            selectedStar = null;
+            SpriteController.instance.ClearDisplayedSelection();
+            ViewController.instance.DisplaySystem(star);
+        }
+    }
+
+
+    void SelectedBody(GameObject go)
+    {
+        Body body = (Body) SpriteController.instance.GetSpaceObjectFromGameObject(go);
+
+        if (selectedBody != body)
+        {
+            selectedBody = body;
+            SpriteController.instance.DisplaySelectedSpaceObject(body);
+            ViewController.instance.DisplaySelectionInfo(body);
+        }
+        else
+        {
+            selectedBody = null;
+            SpriteController.instance.ClearDisplayedSelection();
+        }
+    }
 
 }
