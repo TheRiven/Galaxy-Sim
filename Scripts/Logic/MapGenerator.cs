@@ -154,7 +154,6 @@ public static class MapGenerator {
             float y = radius * Mathf.Sin(angle);      
 
             Vector3 bodyPosition = new Vector3(x, y);
-            radius = radius + Random.Range(3, 6);
             
             // Set the name, currently using the position but will use a name list/name gen later.
             string name = "Body_" + radius;
@@ -165,6 +164,9 @@ public static class MapGenerator {
             // Create the body and add it to the list
             Body newBody = new Body(bodyPosition, name, type);
             systemBodies.Add(newBody);
+
+            // add a random int from 3 - 6 to the range.
+            radius = radius + Random.Range(3, 6);
         }
 
 

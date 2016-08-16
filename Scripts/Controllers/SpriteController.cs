@@ -7,12 +7,15 @@ public class SpriteController : MonoBehaviour {
 
     Dictionary<ISpaceGameObject, GameObject> gameObjectDictionary; // Dictionary of Space objects and their GameObjects.
 
+    List<GameObject> disposableObjects;
+
     public static SpriteController instance; // Static Instance of the SpriteController for easy access.
 
     public Sprite defaultStarSprite;    // Basic star sprite
     public Sprite selectionSprite;      // Basic selection sprite
     public Sprite sunSprite;            // Basic Sun Sprite
     public Sprite planetSprite;         // Basic Planet Sprite
+    public Sprite orbitSprite;          // Basic Orbit Sprite
 
     GameObject selectionCircle; // The object showing the selected star.
 
@@ -24,6 +27,7 @@ public class SpriteController : MonoBehaviour {
     {
         instance = this;
         gameObjectDictionary = new Dictionary<ISpaceGameObject, GameObject>();
+        disposableObjects = new List<GameObject>();
 
     }
 	
@@ -38,26 +42,49 @@ public class SpriteController : MonoBehaviour {
     public void CreateGameObjects(ISpaceGameObject spaceObject)
     {
         // Create and setup the Gameobjects.
-        GameObject starGO = new GameObject(spaceObject.name);
-        starGO.transform.SetParent(this.transform);
-        starGO.transform.position = spaceObject.position;
-        gameObjectDictionary.Add(spaceObject, starGO);
+        GameObject go = new GameObject(spaceObject.name);
+        go.transform.SetParent(this.transform);
+        go.transform.position = spaceObject.position;
+        gameObjectDictionary.Add(spaceObject, go);
 
         // add the sprite renderer.
-        SpriteRenderer sr = starGO.AddComponent<SpriteRenderer>();
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
 
         switch (spaceObject.type)
         {
-            case objectType.STAR : sr.sprite = defaultStarSprite;
+            case objectType.STAR :
+                sr.sprite = defaultStarSprite;
                 break;
-            case objectType.SUN  : sr.sprite = sunSprite;
+            case objectType.SUN  :
+                sr.sprite = sunSprite;
                 break;
-            case objectType.PLANET : sr.sprite = planetSprite;
+            case objectType.PLANET :
+                sr.sprite = planetSprite;
+                CreateOrbitalGameObject(go);
                 break;
         }
 
         // Add a collider to allow raycasting.
-        starGO.AddComponent<BoxCollider>();
+        go.AddComponent<BoxCollider>();
+
+    }
+
+
+    void CreateOrbitalGameObject(GameObject orbitingObject)
+    {
+        // Create and setup the Gameobjects.
+        GameObject go = new GameObject();
+        go.transform.SetParent(this.transform);
+
+        // add the sprite renderer.
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = orbitSprite;
+
+        int radius = (int)Mathf.Sqrt(Mathf.Pow(orbitingObject.transform.position.x - 0, 2) + Mathf.Pow(orbitingObject.transform.position.y - 0, 2));
+
+        go.transform.localScale = new Vector3(radius * 2, radius * 2, 1);
+
+        disposableObjects.Add(go);
 
     }
 
@@ -70,8 +97,15 @@ public class SpriteController : MonoBehaviour {
             Destroy(gameObjectDictionary[spaceObject]);
         }
 
-        // Resets the Dictionary
+        foreach(GameObject go in disposableObjects)
+        {
+            Destroy(go);
+        }
+
+        // Resets the Dictionary and list
         gameObjectDictionary = new Dictionary<ISpaceGameObject, GameObject>();
+        disposableObjects = new List<GameObject>();
+
     }
 
     
