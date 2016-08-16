@@ -17,6 +17,9 @@ public class ViewController : MonoBehaviour {
     public VIEWMODE viewMode { get; private set; }
 
     public static ViewController instance;
+
+    public GameObject infoPanelTop;
+    public GameObject infoPanelRight;
     
     #endregion ---------------
 
@@ -52,6 +55,7 @@ public class ViewController : MonoBehaviour {
             SpriteController.instance.CreateGameObjects(system);
         }
 
+        infoPanelTop.GetComponent<TopInfoPanel>().DisplayText("Galaxy View : Double click a star to view the system");
     }
 
 
@@ -73,7 +77,13 @@ public class ViewController : MonoBehaviour {
             SpriteController.instance.CreateGameObjects(body);
         }
 
+        infoPanelTop.GetComponent<TopInfoPanel>().DisplayText("Star-system View : Press Space to return");
+    }
 
+
+    public void DisplaySelectionInfo(ISpaceGameObject selectedObject)
+    {
+        infoPanelRight.GetComponent<RightInfoPanel>().DisplayText(selectedObject.name);
     }
 
 }

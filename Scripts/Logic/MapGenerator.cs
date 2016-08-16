@@ -138,8 +138,6 @@ public static class MapGenerator {
         Body sun = new Body(sunPosition, "Sun", objectType.SUN);
         systemBodies.Add(sun);
 
-        // TODO: create other system bodies.
-
         // Work out how many bodies the system will have, from 0 to 5 for now.
         int bodyCount = Random.Range(0, 5);
         int radius = 5;

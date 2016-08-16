@@ -34,6 +34,7 @@ public class InputController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) & ViewController.instance.viewMode == VIEWMODE.GALAXY)
             SelectObject();
 
+        // Escape key for Star System Mode
         if (Input.GetKeyDown(KeyCode.Space) & ViewController.instance.viewMode == VIEWMODE.STARSYSTEM)
             ViewController.instance.DisplayGalaxy();
 
@@ -76,6 +77,7 @@ public class InputController : MonoBehaviour {
             {
                 selectedStar = star;
                 SpriteController.instance.DisplaySelectedStarSystem(star);
+                ViewController.instance.DisplaySelectionInfo(star);
             }
             else
             {
